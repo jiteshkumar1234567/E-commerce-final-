@@ -1,22 +1,22 @@
 <%- include("./partials/header") %>
 
 <!-- ================= MY ORDERS HERO ================= -->
-<section class="pt-32 pb-20 px-6">
-  <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-14 items-center">
+<section class="pt-28 md:pt-32 pb-16 px-4 sm:px-6">
+  <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-14 items-center">
 
     <div>
-      <span class="inline-block mb-6 px-6 py-2 rounded-full bg-white/20 text-sm backdrop-blur">
+      <span class="inline-block mb-4 sm:mb-6 px-4 sm:px-6 py-1 sm:py-2 rounded-full bg-white/20 text-sm backdrop-blur">
         📦 Your Purchase History
       </span>
 
-      <h1 class="text-5xl md:text-6xl font-extrabold leading-tight">
+      <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight">
         My <span class="bg-gradient-to-r from-yellow-300 to-orange-400 bg-clip-text text-transparent">
           Orders
         </span>
       </h1>
 
-      <p class="mt-6 text-lg text-white/80 max-w-xl">
-        Track all your purchases, delivery status and order details in one place.
+      <p class="mt-4 sm:mt-6 text-sm sm:text-lg text-white/80 max-w-xl">
+        Track all your purchases, delivery status, and order details in one place.
       </p>
     </div>
 
@@ -24,131 +24,104 @@
 </section>
 
 <!-- ================= ORDERS LIST ================= -->
-<section class="pb-24 px-6">
-  <div class="max-w-5xl mx-auto">
+<section class="pb-20 px-4 sm:px-6">
+  <div class="max-w-5xl mx-auto space-y-6">
 
     <% if (orders.length === 0) { %>
       <div class="p-6 rounded-xl bg-white/10 backdrop-blur text-center">
-        <p class="text-white/70">You have not placed any orders yet.</p>
+        <p class="text-white/70 text-sm sm:text-base">You have not placed any orders yet.</p>
       </div>
     <% } %>
 
     <% orders.forEach(order => { %>
-      <div class="mb-8 rounded-2xl bg-white/10 backdrop-blur
+      <div class="mb-6 rounded-2xl bg-white/10 backdrop-blur
                   border border-white/10 shadow-xl overflow-hidden
                   hover:border-white/20 transition">
 
         <!-- ORDER HEADER -->
-    <div
-  class="flex flex-col md:flex-row
-         md:items-center md:justify-between
-         gap-6 px-6 py-4
-         border-b border-white/10">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 md:gap-6 px-4 sm:px-6 py-4 border-b border-white/10">
 
-  <!-- DATES -->
-  <div class="flex gap-10">
-    <div>
-      <p class="text-[11px] uppercase text-white/50">Order Date</p>
-      <p class="text-sm font-medium">
-        <%= order.orderDate.toDateString() %>
-      </p>
-    </div>
+          <!-- DATES -->
+          <div class="flex flex-col sm:flex-row gap-4 sm:gap-10">
+            <div>
+              <p class="text-[10px] sm:text-[11px] uppercase text-white/50">Order Date</p>
+              <p class="text-xs sm:text-sm font-medium">
+                <%= order.orderDate.toDateString() %>
+              </p>
+            </div>
 
-    <div>
-      <p class="text-[11px] uppercase text-white/50">Delivery By</p>
-      <p class="text-sm font-medium">
-        <%= order.deliveryDate.toDateString() %>
-      </p>
-    </div>
-  </div>
+            <div>
+              <p class="text-[10px] sm:text-[11px] uppercase text-white/50">Delivery By</p>
+              <p class="text-xs sm:text-sm font-medium">
+                <%= order.deliveryDate.toDateString() %>
+              </p>
+            </div>
+          </div>
 
-  <!-- STATUS TRACKER -->
-  <div class="flex items-center gap-4">
+          <!-- STATUS TRACKER -->
+          <div class="flex items-center gap-3 sm:gap-4 mt-3 md:mt-0">
 
-    <!-- Pending -->
-    <div class="flex flex-col items-center">
-      <div class="w-4 h-4 rounded-full
-        <%= ["Pending","Shipped","Delivered"].includes(order.status)
-            ? "bg-yellow-400"
-            : "bg-white/30" %>">
-      </div>
-      <span class="text-[10px] mt-1 text-white/70">Pending</span>
-    </div>
+            <!-- Pending -->
+            <div class="flex flex-col items-center">
+              <div class="w-3 sm:w-4 h-3 sm:h-4 rounded-full <%= ["Pending","Shipped","Delivered"].includes(order.status) ? "bg-yellow-400" : "bg-white/30" %>"></div>
+              <span class="text-[8px] sm:text-[10px] mt-1 text-white/70">Pending</span>
+            </div>
 
-    <!-- Line -->
-    <div class="h-[2px] w-10
-      <%= ["Shipped","Delivered"].includes(order.status)
-          ? "bg-blue-400"
-          : "bg-white/20" %>">
-    </div>
+            <!-- Line -->
+            <div class="h-[1px] sm:h-[2px] w-6 sm:w-10 <%= ["Shipped","Delivered"].includes(order.status) ? "bg-blue-400" : "bg-white/20" %>"></div>
 
-    <!-- Shipped -->
-    <div class="flex flex-col items-center">
-      <div class="w-4 h-4 rounded-full
-        <%= ["Shipped","Delivered"].includes(order.status)
-            ? "bg-blue-400"
-            : "bg-white/30" %>">
-      </div>
-      <span class="text-[10px] mt-1 text-white/70">Shipped</span>
-    </div>
+            <!-- Shipped -->
+            <div class="flex flex-col items-center">
+              <div class="w-3 sm:w-4 h-3 sm:h-4 rounded-full <%= ["Shipped","Delivered"].includes(order.status) ? "bg-blue-400" : "bg-white/30" %>"></div>
+              <span class="text-[8px] sm:text-[10px] mt-1 text-white/70">Shipped</span>
+            </div>
 
-    <!-- Line -->
-    <div class="h-[2px] w-10
-      <%= order.status === "Delivered"
-          ? "bg-green-400"
-          : "bg-white/20" %>">
-    </div>
+            <!-- Line -->
+            <div class="h-[1px] sm:h-[2px] w-6 sm:w-10 <%= order.status === "Delivered" ? "bg-green-400" : "bg-white/20" %>"></div>
 
-    <!-- Delivered -->
-    <div class="flex flex-col items-center">
-      <div class="w-4 h-4 rounded-full
-        <%= order.status === "Delivered"
-            ? "bg-green-400"
-            : "bg-white/30" %>">
-      </div>
-      <span class="text-[10px] mt-1 text-white/70">Delivered</span>
-    </div>
+            <!-- Delivered -->
+            <div class="flex flex-col items-center">
+              <div class="w-3 sm:w-4 h-3 sm:h-4 rounded-full <%= order.status === "Delivered" ? "bg-green-400" : "bg-white/30" %>"></div>
+              <span class="text-[8px] sm:text-[10px] mt-1 text-white/70">Delivered</span>
+            </div>
 
-  </div>
-</div>
-
+          </div>
+        </div>
 
         <!-- ORDER ITEMS -->
-        <div class="px-6 py-5 space-y-4">
+        <div class="px-4 sm:px-6 py-4 sm:py-5 space-y-3 sm:space-y-4">
           <% order.items.forEach(item => { %>
-
-            <div class="flex items-center gap-4 border-b border-white/10 pb-4 last:border-none">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 border-b border-white/10 pb-3 sm:pb-4 last:border-none">
 
               <!-- IMAGE -->
               <img
                 src="<%= item.product?.images?.[0] || '/images/fallback.png' %>"
                 alt="product"
-                class="w-20 h-20 object-cover rounded-xl border border-white/10"
+                class="w-16 sm:w-20 h-16 sm:h-20 object-cover rounded-xl border border-white/10"
               />
 
               <!-- DETAILS -->
               <div class="flex-1">
-                <h4 class="text-base font-semibold">
+                <h4 class="text-sm sm:text-base font-semibold">
                   <%= item.product?.name || "Product removed" %>
                 </h4>
-                <p class="text-xs text-white/60">
+                <p class="text-[10px] sm:text-xs text-white/60">
                   Quantity: <%= item.quantity %>
                 </p>
               </div>
 
               <!-- PRICE -->
-              <div class="text-base font-bold text-yellow-300">
-                ₹<%= item.product?.finalPrice || item.product?.price || 0 %>
+              <div class="text-sm sm:text-base font-bold text-yellow-300 mt-2 sm:mt-0">
+                ₹<%= (item.product?.finalPrice || item.product?.price || 0) * item.quantity %>
               </div>
 
             </div>
-
           <% }) %>
         </div>
 
         <!-- FOOTER -->
-        <div class="px-6 py-4 flex justify-end bg-white/5">
-          <span class="text-base font-semibold">
+        <div class="px-4 sm:px-6 py-3 sm:py-4 flex justify-end bg-white/5">
+          <span class="text-sm sm:text-base font-semibold">
             Total:
             <span class="text-yellow-300">₹<%= order.totalAmount %></span>
           </span>
@@ -159,12 +132,5 @@
 
   </div>
 </section>
-
-<style>
-@keyframes float {
-  0%,100% { transform: translateY(0); }
-  50% { transform: translateY(-14px); }
-}
-</style>
 
 <%- include("./partials/footer") %>

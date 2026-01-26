@@ -1,74 +1,70 @@
 <%- include('./partials/header') %>
 
-<section class="min-h-screen pt-32 px-6
+<section class="min-h-screen pt-28 md:pt-32 px-4 sm:px-6
 bg-gradient-to-br from-indigo-700 via-purple-700 to-pink-600
 text-white">
 
-  <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-10">
+  <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
 
     <!-- ===== LEFT: Address + Cart ===== -->
-    <div class="p-8 rounded-3xl
+    <div class="p-6 sm:p-8 rounded-3xl
                 bg-white/10 backdrop-blur-2xl
                 border border-white/20
                 shadow-2xl space-y-6">
 
-      <h2 class="text-3xl font-extrabold text-yellow-300">
+      <h2 class="text-2xl sm:text-3xl font-extrabold text-yellow-300">
         Delivery Address
       </h2>
 
       <form id="checkoutForm" action="/checkout/place-order" method="POST" class="space-y-6">
 
         <textarea name="address" id="address"
-          class="w-full px-5 py-4 rounded-2xl
+          class="w-full px-4 sm:px-5 py-3 sm:py-4 rounded-2xl
           bg-white/10 border border-white/20
           placeholder-white/50
           focus:outline-none focus:ring-2 focus:ring-yellow-300 transition"
           placeholder="Enter your delivery address" required><%= address %></textarea>
 
-        <h2 class="text-2xl font-bold mt-8">
+        <h2 class="text-xl sm:text-2xl font-bold mt-6 sm:mt-8">
           Cart Items
         </h2>
 
         <% cart.forEach(item => { %>
-          <div class="flex justify-between items-center
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center
                       p-4 rounded-2xl
                       bg-white/10 border border-white/20
-                      hover:bg-white/15 transition">
+                      hover:bg-white/15 transition gap-4 sm:gap-0">
 
             <div class="flex items-center gap-4">
-  <img
-    src="<%= item.product?.images?.[0] || '/images/fallback.png' %>"
-    class="w-16 h-16 object-cover rounded-xl border border-white/20"
-  />
+              <img
+                src="<%= item.product?.images?.[0] || '/images/fallback.png' %>"
+                class="w-16 sm:w-20 h-16 sm:h-20 object-cover rounded-xl border border-white/20"
+                alt="<%= item.product?.name %>"
+              />
+              <div>
+                <p class="font-semibold text-sm sm:text-base">
+                  <%= item.product?.name || "Product removed" %>
+                </p>
+                <p class="text-xs sm:text-sm text-white/70">
+                  Qty: <%= item.quantity %>
+                </p>
+              </div>
+            </div>
 
-  <div>
-    <p class="font-semibold">
-      <%= item.product?.name || "Product removed" %>
-    </p>
-    <p class="text-sm text-white/70">
-      Qty: <%= item.quantity %>
-    </p>
-  </div>
-</div>
-
-<span class="font-bold text-yellow-300">
-  ₹ <%= (item.product?.finalPrice || 0) * item.quantity %>
-</span>
-
-            <span class="font-bold text-yellow-300">
-              ₹ <%= item.product.finalPrice * item.quantity %>
+            <span class="font-bold text-yellow-300 text-sm sm:text-base mt-2 sm:mt-0">
+              ₹ <%= (item.product?.finalPrice || 0) * item.quantity %>
             </span>
           </div>
         <% }) %>
 
         <!-- TOTAL -->
         <div class="flex justify-between items-center
-                    mt-6 p-5 rounded-2xl
+                    mt-6 p-4 sm:p-5 rounded-2xl
                     bg-white/15 border border-white/20">
 
-          <span class="text-xl font-semibold">Total</span>
+          <span class="text-lg sm:text-xl font-semibold">Total</span>
           <span id="totalAmount"
-                class="text-2xl font-extrabold text-yellow-300">
+                class="text-xl sm:text-2xl font-extrabold text-yellow-300">
             ₹ <%= total %>
           </span>
         </div>
@@ -81,25 +77,25 @@ text-white">
     </div>
 
     <!-- ===== RIGHT: Coupon + Payment ===== -->
-    <div class="p-8 rounded-3xl
+    <div class="p-6 sm:p-8 rounded-3xl
                 bg-white/10 backdrop-blur-2xl
                 border border-white/20
-                shadow-2xl space-y-6">
+                shadow-2xl space-y-6 mt-6 md:mt-0">
 
-      <h2 class="text-3xl font-extrabold text-yellow-300">
+      <h2 class="text-2xl sm:text-3xl font-extrabold text-yellow-300">
         Apply Coupon
       </h2>
 
       <div class="space-y-3">
         <input type="text" id="couponInput"
           placeholder="Enter coupon code"
-          class="w-full px-5 py-4 rounded-2xl
+          class="w-full px-4 sm:px-5 py-3 sm:py-4 rounded-2xl
           bg-white/10 border border-white/20
           placeholder-white/50
           focus:outline-none focus:ring-2 focus:ring-yellow-300 transition" />
 
         <button id="applyCoupon"
-          class="w-full py-4 rounded-2xl font-bold
+          class="w-full py-3 sm:py-4 rounded-2xl font-bold
           bg-gradient-to-r from-yellow-300 to-orange-400
           text-zinc-900 hover:scale-105 transition">
           Apply Coupon
@@ -108,12 +104,12 @@ text-white">
         <p id="couponMessage" class="text-sm font-semibold hidden"></p>
       </div>
 
-      <h2 class="text-2xl font-bold mt-8">
+      <h2 class="text-xl sm:text-2xl font-bold mt-6 sm:mt-8">
         Payment Method
       </h2>
 
       <select form="checkoutForm" name="payment"
-        class="w-full px-5 py-4 rounded-2xl
+        class="w-full px-4 sm:px-5 py-3 sm:py-4 rounded-2xl
         bg-white/10 border border-white/20
         focus:outline-none focus:ring-2 focus:ring-yellow-300 transition">
         <option value="COD">Cash on Delivery</option>
@@ -121,7 +117,7 @@ text-white">
       </select>
 
       <button type="submit" form="checkoutForm"
-        class="w-full mt-6 py-5 rounded-2xl font-extrabold
+        class="w-full mt-6 py-4 sm:py-5 rounded-2xl font-extrabold
         bg-gradient-to-r from-yellow-300 to-orange-400
         text-zinc-900 hover:scale-105 hover:shadow-2xl transition">
         Place Order
@@ -145,11 +141,9 @@ const couponMessage = document.getElementById("couponMessage");
 const totalEl = document.getElementById("totalAmount");
 const finalTotalInput = document.getElementById("finalTotal");
 
-// Original total from server
 const originalTotal = parseFloat(<%= total %>);
 let currentTotal = originalTotal;
 
-// Init
 totalEl.textContent = `₹ ${originalTotal.toFixed(2)}`;
 finalTotalInput.value = originalTotal.toFixed(2);
 
@@ -174,7 +168,6 @@ applyBtn.addEventListener("click", (e) => {
     const discountPercent = coupons[code];
     const discountAmount = (originalTotal * discountPercent) / 100;
 
-    // ✅ DISCOUNT APPLIED
     currentTotal = originalTotal - discountAmount;
 
     totalEl.textContent = `₹ ${currentTotal.toFixed(2)}`;
@@ -192,7 +185,7 @@ applyBtn.addEventListener("click", (e) => {
     finalTotalInput.value = currentTotal.toFixed(2);
     couponHidden.value = "";
 
-    couponMessage.textContent = "❌ Invalid coupon code plz try again";
+    couponMessage.textContent = "❌ Invalid coupon code, try again";
     couponMessage.className = "text-red-400 font-semibold";
     couponMessage.classList.remove("hidden");
   }

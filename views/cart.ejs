@@ -8,16 +8,65 @@
 .animate-slideIn {
   animation: slideIn 0.3s ease forwards;
 }
+
+/* Responsive adjustments */
+.cart-item img {
+  width: 80px;
+  height: 80px;
+}
+@media (min-width: 640px) {
+  .cart-item img { width: 96px; height: 96px; }
+}
+@media (min-width: 768px) {
+  .cart-item img { width: 112px; height: 112px; }
+}
+@media (min-width: 1024px) {
+  .cart-item img { width: 120px; height: 120px; }
+}
+
+/* Buttons */
+.qty-btn {
+  min-width: 36px;
+  text-align: center;
+}
+@media (min-width: 640px) {
+  .qty-btn { min-width: 40px; }
+}
+@media (min-width: 768px) {
+  .qty-btn { min-width: 44px; }
+}
+
+/* Checkout section responsive */
+.checkout-section {
+  flex-direction: column;
+  gap: 12px;
+}
+@media (min-width: 768px) {
+  .checkout-section {
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 0;
+  }
+}
+
+/* Empty cart message */
+.empty-cart {
+  padding: 20px;
+  font-size: 1.1rem;
+}
+@media (min-width: 640px) {
+  .empty-cart { padding: 28px; font-size: 1.25rem; }
+}
 </style>
 
-<section class="min-h-screen pt-32 px-6
+<section class="min-h-screen pt-28 md:pt-32 px-4 sm:px-6
                 bg-gradient-to-br from-indigo-700 via-purple-700 to-pink-600
                 text-white">
 
   <div class="max-w-5xl mx-auto">
 
     <!-- Heading -->
-    <h1 class="text-4xl md:text-5xl font-extrabold mb-12 tracking-tight">
+    <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-10 sm:mb-12 tracking-tight text-center sm:text-left">
       <span class="text-yellow-300">Your Cart</span>
     </h1>
 
@@ -27,8 +76,8 @@
     <% if(cartItemsSafe.length === 0){ %>
 
       <div class="bg-white/10 backdrop-blur-2xl border border-white/20
-                  rounded-3xl text-center py-20">
-        <p class="text-white/70 text-xl">Your cart is empty!</p>
+                  rounded-3xl text-center empty-cart">
+        <p class="text-white/70">Your cart is empty!</p>
       </div>
 
     <% } else { %>
@@ -36,57 +85,49 @@
       <% cartItemsSafe.forEach(item => { %>
         <% total += item.product.finalPrice * item.quantity %>
 
-        <div class="flex items-center gap-6 mb-6
+        <div class="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6 mb-6
                     bg-white/10 backdrop-blur-2xl border border-white/20
-                    rounded-3xl p-6 hover:bg-white/15 transition cart-item"
+                    rounded-3xl p-4 sm:p-6 hover:bg-white/15 transition cart-item"
              data-product-id="<%= item.product._id %>">
 
           <!-- Product Image -->
-   <img
-  src="<%= item.product.images && item.product.images.length ? item.product.images[0] : '/images/fallback.png' %>"
-  class="w-24 h-24 rounded-2xl object-cover border border-white/20"
-/>
-
+          <img
+            src="<%= item.product.images && item.product.images.length ? item.product.images[0] : '/images/fallback.png' %>"
+            alt="<%= item.product.name %>"
+            class="rounded-2xl object-cover border border-white/20"
+          />
 
           <!-- Info -->
-          <div class="flex-1">
-            <h3 class="text-xl font-semibold">
+          <div class="flex-1 w-full">
+            <h3 class="text-lg sm:text-xl font-semibold mb-2 sm:mb-3">
               <%= item.product.name %>
             </h3>
 
             <!-- Quantity Controls -->
-            <div class="mt-3 flex items-center gap-4">
+            <div class="flex flex-wrap sm:flex-nowrap items-center gap-3 sm:gap-4">
+              <button
+                class="qty-btn decrease px-3 py-2 rounded-lg bg-white/20 hover:bg-white/30"
+                data-id="<%= item.product._id %>">−</button>
+
+              <span class="quantity text-lg font-semibold"><%= item.quantity %></span>
 
               <button
-                class="qty-btn decrease px-4 py-2 rounded-lg bg-white/20 hover:bg-white/30"
-                data-id="<%= item.product._id %>">
-                −
-              </button>
+                class="qty-btn increase px-3 py-2 rounded-lg bg-white/20 hover:bg-white/30"
+                data-id="<%= item.product._id %>">+</button>
 
-              <span class="quantity text-lg font-semibold">
-                <%= item.quantity %>
-              </span>
-
-              <button
-                class="qty-btn increase px-4 py-2 rounded-lg bg-white/20 hover:bg-white/30"
-                data-id="<%= item.product._id %>">
-                +
-              </button>
-
-              <span class="ml-4 text-white/80">
+              <span class="ml-0 sm:ml-4 text-white/80 text-sm sm:text-base">
                <b>Single product</b> ₹ <%= item.product.finalPrice %>
               </span>
-
             </div>
           </div>
 
           <!-- Remove -->
-          <form class="remove-item-form" action="/cart/remove/<%= item.product._id %>" method="POST">
+          <form class="remove-item-form mt-3 sm:mt-0 flex-shrink-0" action="/cart/remove/<%= item.product._id %>" method="POST">
             <button type="submit"
               class="px-6 py-3 rounded-xl
                      bg-white/10 hover:bg-red-500
                      text-white/80 hover:text-white
-                     transition">
+                     transition w-full sm:w-auto">
               Remove
             </button>
           </form>
@@ -95,19 +136,18 @@
       <% }) %>
 
       <!-- TOTAL AND CHECKOUT -->
-      <div class="mt-14 mb-10 flex justify-between items-center
+      <div class="checkout-section mt-12 sm:mt-14 mb-10 flex
                   bg-white/15 backdrop-blur-2xl border border-white/20
-                  rounded-3xl p-8">
+                  rounded-3xl p-6 sm:p-8 items-center">
 
-        <h2 class="text-2xl font-bold">
-          Total:
-          <span class="text-yellow-300">₹ <%= total %></span>
+        <h2 class="text-xl sm:text-2xl font-bold">
+          Total: <span class="text-yellow-300">₹ <%= total %></span>
         </h2>
 
         <a href="/checkout"
-           class="px-12 py-4 rounded-2xl font-semibold
+           class="mt-4 sm:mt-0 px-10 sm:px-12 py-3 sm:py-4 rounded-2xl font-semibold
                   bg-gradient-to-r from-yellow-300 to-orange-400
-                  text-zinc-900 hover:scale-105 transition">
+                  text-zinc-900 hover:scale-105 transition w-full sm:w-auto text-center">
           Checkout
         </a>
       </div>
@@ -141,34 +181,27 @@ function showToast(msg, type="success") {
   }, 2500);
 }
 
-
 // REMOVE ITEM
 document.querySelectorAll(".remove-item-form").forEach(form => {
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
-
     try {
       const res = await fetch(form.action, { method: "POST" });
       const data = await res.json();
-
-      if (!data.success) {
-        showToast("Something went wrong", "error");
-        return;
-      }
+      if (!data.success) { showToast("Something went wrong", "error"); return; }
 
       const card = form.closest(".cart-item");
       card.remove();
-
       showToast("Item removed", "success");
 
-      document.querySelector("h2 span.text-yellow-300").innerText =
-        "₹ " + data.newTotal;
+      const totalEl = document.querySelector("h2 span.text-yellow-300");
+      if(totalEl) totalEl.innerText = "₹ " + data.newTotal;
 
       if (document.querySelectorAll(".cart-item").length === 0) {
         document.querySelector(".max-w-5xl.mx-auto").innerHTML = `
           <div class="bg-white/10 backdrop-blur-2xl border border-white/20
-                      rounded-3xl text-center py-20">
-            <p class="text-white/70 text-xl">Your cart is empty!</p>
+                      rounded-3xl text-center empty-cart">
+            <p class="text-white/70">Your cart is empty!</p>
           </div>`;
       }
 
@@ -179,11 +212,9 @@ document.querySelectorAll(".remove-item-form").forEach(form => {
   });
 });
 
-
 // INCREASE / DECREASE
 document.querySelectorAll(".qty-btn").forEach(btn => {
   btn.addEventListener("click", async () => {
-
     const productId = btn.dataset.id;
     const isIncrease = btn.classList.contains("increase");
     const url = isIncrease
@@ -193,37 +224,28 @@ document.querySelectorAll(".qty-btn").forEach(btn => {
     try {
       const res = await fetch(url, { method: "POST" });
       const data = await res.json();
-
-      if (!data.success) {
-        showToast("Something went wrong", "error");
-        return;
-      }
+      if (!data.success) { showToast("Something went wrong", "error"); return; }
 
       const card = btn.closest(".cart-item");
       const qtyEl = card.querySelector(".quantity");
       let qty = parseInt(qtyEl.innerText);
 
-      if (isIncrease) {
-        qty++;
-        qtyEl.innerText = qty;
-      } else {
-        if (qty > 1) {
-          qty--;
-          qtyEl.innerText = qty;
-        } else {
-          card.remove();
-          showToast("Item removed", "success");
-        }
+      if (isIncrease) qty++; else qty = Math.max(qty-1,0);
+      qtyEl.innerText = qty;
+
+      if(qty === 0) {
+        card.remove();
+        showToast("Item removed", "success");
       }
 
-      document.querySelector("h2 span.text-yellow-300").innerText =
-        "₹ " + data.newTotal;
+      const totalEl = document.querySelector("h2 span.text-yellow-300");
+      if(totalEl) totalEl.innerText = "₹ " + data.newTotal;
 
       if (document.querySelectorAll(".cart-item").length === 0) {
         document.querySelector(".max-w-5xl.mx-auto").innerHTML = `
           <div class="bg-white/10 backdrop-blur-2xl border border-white/20
-                      rounded-3xl text-center py-20">
-            <p class="text-white/70 text-xl">Your cart is empty!</p>
+                      rounded-3xl text-center empty-cart">
+            <p class="text-white/70">Your cart is empty!</p>
           </div>`;
       }
 

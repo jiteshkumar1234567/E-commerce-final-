@@ -1,29 +1,27 @@
-<footer class="relative  overflow-hidden">
+<footer class="relative overflow-hidden">
 
   <!-- GLOW BACKGROUND -->
   <div class="absolute inset-0 bg-gradient-to-br from-zinc-900 via-indigo-900 to-purple-900"></div>
 
   <!-- FLOATING GLOWS -->
-  <div class="absolute w-96 h-96 bg-yellow-400/20 blur-[140px] rounded-full top-[-20%] left-[-10%]"></div>
-  <div class="absolute w-96 h-96 bg-pink-500/20 blur-[140px] rounded-full bottom-[-20%] right-[-10%]"></div>
+  <div class="absolute w-72 sm:w-96 h-72 sm:h-96 bg-yellow-400/20 blur-[120px] sm:blur-[140px] rounded-full top-[-20%] left-[-10%]"></div>
+  <div class="absolute w-72 sm:w-96 h-72 sm:h-96 bg-pink-500/20 blur-[120px] sm:blur-[140px] rounded-full bottom-[-20%] right-[-10%]"></div>
 
   <!-- GLASS FOOTER -->
   <div class="relative z-10 backdrop-blur-3xl bg-white/5 border-t border-white/10">
 
-    <div class="max-w-7xl mx-auto px-6 py-20 grid grid-cols-1 md:grid-cols-4 gap-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-20 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 sm:gap-12">
 
       <!-- BRAND -->
       <div>
-  <h2 class="text-4xl font-extrabold text-white mb-4 tracking-wide">
-    Scatch Electronics
-  </h2>
-
-  <p class="text-white/70 leading-relaxed max-w-sm">
-    Your one-stop destination for cutting-edge electronics, smart gadgets
-    and high-performance technology designed for modern digital lifestyles.
-  </p>
-</div>
-
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-white mb-4 sm:mb-6 tracking-wide">
+          Scatch Electronics
+        </h2>
+        <p class="text-white/70 leading-relaxed text-sm sm:text-base max-w-sm">
+          Your one-stop destination for cutting-edge electronics, smart gadgets,
+          and high-performance technology for modern digital lifestyles.
+        </p>
+      </div>
 
       <!-- LINKS -->
       <div>
@@ -48,7 +46,7 @@
       <!-- SOCIAL -->
       <div>
         <h4 class="footer-title">Connect</h4>
-        <div class="flex gap-4 mt-4">
+        <div class="flex gap-3 sm:gap-4 mt-3 sm:mt-4 flex-wrap">
           <a class="social-icon" href="https://www.instagram.com/mehta_.jitesh?igsh=MWlwdmIxcm1nb2t1MA=="><i class="ri-instagram-line"></i></a>
           <a class="social-icon" href="#"><i class="ri-twitter-x-line"></i></a>
           <a class="social-icon" href="https://www.linkedin.com/in/jitesh-kumar-379197338?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"><i class="ri-linkedin-line"></i></a>
@@ -60,7 +58,7 @@
 
     <!-- BOTTOM BAR -->
     <div class="border-t border-white/10">
-      <div class="max-w-7xl mx-auto px-6 py-5 flex flex-col md:flex-row items-center justify-between text-white/60 text-sm">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-5 flex flex-col sm:flex-row items-center justify-between text-white/60 text-xs sm:text-sm gap-2 sm:gap-0">
         <p>© <%= new Date().getFullYear() %> Scatch. All rights reserved.</p>
         <p class="tracking-wide">Crafted with ❤️ by Scatch Team</p>
       </div>
@@ -70,20 +68,21 @@
 </footer>
 
 <style>
-  .footer-title {
-  font-size: 1.1rem;
+.footer-title {
+  font-size: 1rem;
+  sm:1.1rem;
   font-weight: 600;
   color: white;
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
   position: relative;
 }
-
 .footer-title::after {
   content: "";
   position: absolute;
   left: 0;
   bottom: -6px;
-  width: 32px;
+  width: 28px;
+  sm:32px;
   height: 3px;
   border-radius: 999px;
   background: linear-gradient(to right, #facc15, #fb7185);
@@ -92,37 +91,37 @@
 .footer-links {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.5rem;
 }
-
 .footer-links a {
   color: rgba(255,255,255,0.7);
   transition: all 0.3s ease;
+  font-size: 0.875rem;
 }
-
 .footer-links a:hover {
   color: #facc15;
-  transform: translateX(6px);
+  transform: translateX(4px);
 }
 
 .social-icon {
-  width: 46px;
-  height: 46px;
+  width: 40px;
+  sm:46px;
+  height: 40px;
+  sm:46px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 14px;
+  border-radius: 12px;
+  sm:14px;
   background: rgba(255,255,255,0.1);
   color: white;
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   transition: all 0.3s ease;
 }
-
 .social-icon:hover {
   background: linear-gradient(to right, #facc15, #fb7185);
   color: #1f2937;
-  transform: translateY(-6px);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0,0,0,0.4);
 }
-
 </style>

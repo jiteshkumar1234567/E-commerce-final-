@@ -14,113 +14,126 @@
 
 <body class="bg-gradient-to-br from-indigo-700 via-purple-700 to-pink-600 text-white">
 
-<!-- ================= NAVBAR ================= -->
-<nav class="fixed top-0 left-0 w-full z-50 backdrop-blur-2xl bg-white/10 border-b border-white/20">
-  <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+<nav class="fixed top-0 left-0 w-full z-50 backdrop-blur-xl bg-white/10 border-b border-white/20 shadow-lg">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
 
     <!-- LOGO -->
     <a href="/" class="flex items-center gap-3">
       <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-yellow-300 to-orange-400
-                  flex items-center justify-center">
+                  flex items-center justify-center shadow-md">
         <i class="ri-shopping-bag-3-fill text-zinc-900 text-xl"></i>
       </div>
-      <h2 class="text-2xl font-extrabold">Scatch</h2>
+      <!-- Full name only on md+ -->
+      <h2 class="hidden md:block text-2xl font-extrabold tracking-tight">Scatch</h2>
     </a>
 
-    <!-- LINKS -->
- <div class="hidden md:flex gap-10 font-medium text-white/90">
-  
-  <a href="/" class="hover:text-yellow-300 transition">Home</a>
-  <a href="/products" class="hover:text-yellow-300 transition">Products</a>
+    <!-- LINKS (desktop) -->
+    <div class="hidden md:flex gap-8 items-center font-medium text-white/90">
+      <a href="/" class="hover:text-yellow-300 transition">Home</a>
+      <a href="/products" class="hover:text-yellow-300 transition">Products</a>
 
-  <!-- My Orders link for logged-in users -->
-  <% if (user) { %>
-    <a href="/users/my-orders">My Orders</a>
-  <% } %>
+      <% if (user) { %>
+        <a href="/users/my-orders" class="hover:text-yellow-300 transition">My Orders</a>
+        <a href="/cart" class="relative flex items-center gap-1 group">
+          <i class="ri-shopping-cart-2-line text-xl group-hover:text-yellow-300 transition"></i>
+          <span class="hidden md:inline font-medium group-hover:text-yellow-300">Cart</span>
+          <% if(cartCount > 0){ %>
+            <span class="absolute -top-2 -right-2 w-5 h-5 rounded-full
+                        bg-gradient-to-r from-yellow-400 to-orange-500
+                        text-black text-xs font-bold flex items-center justify-center">
+              <%= cartCount %>
+            </span>
+          <% } %>
+        </a>
+      <% } %>
+    </div>
 
-  <!-- Cart ONLY for users -->
-  <% if (user) { %>
-    <a href="/cart" class="relative flex items-center gap-2 group">
+    <!-- PROFILE / ACTIONS -->
+    <div class="flex items-center gap-4">
 
-      <!-- Cart Icon -->
-      <i class="ri-shopping-cart-2-line text-xl group-hover:text-yellow-300 transition"></i>
+      <% if(user || owner){ %>
+        <!-- Profile dropdown -->
+        <div class="relative group">
+          <button class="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 transition font-semibold shadow-md">
+            <!-- Show only icon on mobile -->
+            <i class="ri-user-line md:hidden text-white text-lg"></i>
+            <!-- Show full name on md+ -->
+            <span class="hidden md:inline">Hello, <%= owner ? owner.fullname : user.fullname %></span>
+            <i class="ri-arrow-down-s-line hidden md:inline"></i>
+          </button>
 
-      <!-- Text -->
-      <span class="hidden md:inline-block group-hover:text-yellow-300 font-medium">
-        Cart
-      </span>
+          <!-- Dropdown menu -->
+          <div class="absolute right-0 mt-2 w-44 bg-white/10 backdrop-blur-md rounded-xl shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+            <a href="<%= owner ? '/owners/dashboard' : '/users/profile' %>" class="block px-4 py-2 text-white hover:bg-white/20 transition">
+              Profile / Dashboard
+            </a>
+            <a href="/users/logout" class="block px-4 py-2 text-red-500 hover:bg-white/20 transition">
+              Logout
+            </a>
+          </div>
+        </div>
 
-      <!-- Count Badge -->
-      <% if(cartCount > 0){ %>
-        <span id="cart-count" 
-              class="absolute -top-2 -right-3
-                     w-5 h-5 rounded-full
-                     bg-gradient-to-r from-yellow-400 to-orange-500
-                     text-black text-xs font-bold
-                     flex items-center justify-center">
-          <%= cartCount %>
-        </span>
       <% } else { %>
-        <span id="cart-count" class="hidden absolute -top-2 -right-3
-                     w-5 h-5 rounded-full
-                     bg-gradient-to-r from-yellow-400 to-orange-500
-                     text-black text-xs font-bold
-                     flex items-center justify-center">
-          0
-        </span>
+        <a href="/users/login" class="px-4 py-2 rounded-xl bg-white/10 text-white hover:bg-white/20 transition">Login</a>
+        <a href="/users/register" class="px-4 py-2 rounded-xl font-semibold text-zinc-900 bg-gradient-to-r from-yellow-300 to-orange-400 hover:shadow-xl transition">Register</a>
       <% } %>
 
-    </a>
-  <% } %>
-
-</div>
-
-
-<!-- ACTIONS -->
-<div class="flex gap-4 items-center">
-  <% if (owner) { %>
-    <!-- Dashboard link for owner -->
-    <a href="/owners/dashboard"
-       class="px-5 py-2 rounded-xl bg-yellow-400 text-black font-semibold hover:bg-yellow-500 transition">
-      Dashboard
-    </a>
-
-    <a href="/owners/dashboard" class="flex items-center gap-2 px-5 py-2 rounded-xl
-                             bg-white/10 text-white font-semibold
-                             hover:bg-white/20 transition">
-      Hello, <%= owner.fullname %>
-    </a>
-
-    <a href="/users/logout"
-       class="px-5 py-2 rounded-xl bg-red-500 text-white font-semibold hover:bg-red-600 transition">
-      Logout
-    </a>
-
-  <% } else if (user) { %>
-    <a href="/users/profile" class="flex items-center gap-2 px-5 py-2 rounded-xl
-                             bg-white/10 text-white font-semibold
-                             hover:bg-white/20 transition">
-      Hello, <%= user.fullname %>
-    </a>
-
-    <a href="/users/logout"
-       class="px-5 py-2 rounded-xl bg-red-500 text-white font-semibold hover:bg-red-600 transition">
-      Logout
-    </a>
-
-  <% } else { %>
-    <a href="/users/login"
-       class="px-5 py-2 rounded-xl bg-white/10 text-white hover:bg-white/20 transition">
-      Login
-    </a>
-
-    <a href="/users/register"
-       class="px-5 py-2 rounded-xl font-semibold text-zinc-900
-              bg-gradient-to-r from-yellow-300 to-orange-400 hover:shadow-xl transition">
-      Register
-    </a>
-  <% } %>
-</div>
+      <!-- MOBILE MENU BUTTON -->
+      <button id="mobile-menu-btn" class="md:hidden text-white text-2xl focus:outline-none">
+        <i class="ri-menu-3-line"></i>
+      </button>
+    </div>
 
   </div>
+
+  <!-- MOBILE MENU (SLIDE-IN) -->
+  <div id="mobile-menu" class="fixed top-0 right-0 h-full w-64 bg-white/10 backdrop-blur-xl shadow-lg transform translate-x-full transition-transform duration-300 md:hidden z-50">
+    <div class="flex flex-col px-6 py-8 gap-4 text-white/90">
+      <a href="/" class="hover:text-yellow-300 transition">Home</a>
+      <a href="/products" class="hover:text-yellow-300 transition">Products</a>
+
+      <% if(user){ %>
+        <a href="/users/my-orders" class="hover:text-yellow-300 transition">My Orders</a>
+        <a href="/cart" class="relative flex items-center gap-2 group">
+          <i class="ri-shopping-cart-2-line text-xl group-hover:text-yellow-300 transition"></i>
+          <span class="group-hover:text-yellow-300 font-medium">Cart</span>
+          <% if(cartCount > 0){ %>
+            <span class="absolute -top-1 -right-2 w-5 h-5 rounded-full
+                        bg-gradient-to-r from-yellow-400 to-orange-500
+                        text-black text-xs font-bold flex items-center justify-center">
+              <%= cartCount %>
+            </span>
+          <% } %>
+        </a>
+      <% } %>
+
+      <% if(owner){ %>
+        <a href="/owners/dashboard" class="hover:text-yellow-300 transition">Dashboard</a>
+        <a href="/users/logout" class="hover:text-red-500 transition">Logout</a>
+      <% } else if(user){ %>
+        <a href="/users/profile" class="hover:text-yellow-300 transition">Profile</a>
+        <a href="/users/logout" class="hover:text-red-500 transition">Logout</a>
+      <% } else { %>
+        <a href="/users/login" class="hover:text-yellow-300 transition">Login</a>
+        <a href="/users/register" class="hover:text-yellow-300 transition">Register</a>
+      <% } %>
+    </div>
+  </div>
 </nav>
+
+<script>
+  const btn = document.getElementById('mobile-menu-btn');
+  const menu = document.getElementById('mobile-menu');
+
+  btn.addEventListener('click', () => {
+    if(menu.classList.contains('translate-x-full')){
+      menu.classList.remove('translate-x-full');
+      menu.classList.add('translate-x-0');  // open
+    } else {
+      menu.classList.remove('translate-x-0');
+      menu.classList.add('translate-x-full'); // close
+    }
+  });
+</script>
+
+

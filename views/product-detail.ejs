@@ -1,15 +1,51 @@
 <%- include('./partials/header') %>
 
+<style>
+  /* RESPONSIVE STYLING */
+  @media (max-width: 1024px) {
+    .grid-cols-1.md\:grid-cols-2 {
+      grid-template-columns: 1fr !important;
+    }
+    #mainImg {
+      height: 300px !important;
+    }
+    .flex.gap-4.mt-6.flex-wrap img {
+      width: 20% !important;
+      height: auto !important;
+    }
+  }
+
+  @media (max-width: 640px) {
+    section { padding: 4rem 1.5rem; }
+    h1 { font-size: 2rem !important; }
+    p { font-size: 0.9rem !important; }
+    #mainImg { height: 220px !important; }
+    .flex.gap-4.mt-6.flex-wrap img { width: 22% !important; }
+    .flex.gap-4.mt-4 button,
+    .flex.gap-4.mt-4 a {
+      font-size: 0.9rem !important;
+      padding: 0.8rem !important;
+    }
+  }
+
+  /* SLIDE-IN ANIMATION FOR TOAST */
+  @keyframes slideIn {
+    0% { transform: translateX(100%); opacity: 0; }
+    100% { transform: translateX(0); opacity: 1; }
+  }
+  .animate-slideIn { animation: slideIn 0.3s ease forwards; }
+</style>
+
 <section class="pt-32 pb-24 px-6 min-h-screen bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500">
-  <div class="max-w-6xl mx-auto bg-white/20 backdrop-blur-xl rounded-3xl p-10 grid grid-cols-1 md:grid-cols-2 gap-12">
+  <div class="max-w-6xl mx-auto bg-white/20 backdrop-blur-xl rounded-3xl p-6 md:p-10 grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-12">
 
     <!-- ================= IMAGES ================= -->
     <div>
       <img id="mainImg"
            src="<%= product.images[0] %>"
-           class="w-full h-[420px] object-cover rounded-3xl shadow-2xl">
+           class="w-full h-[420px] md:h-[420px] object-cover rounded-3xl shadow-2xl">
 
-      <div class="flex gap-4 mt-6 flex-wrap">
+      <div class="flex gap-4 mt-6 flex-wrap justify-start">
         <% product.images.forEach(img => { %>
           <img src="<%= img %>"
                onclick="changeImg(this.src)"
@@ -24,57 +60,56 @@
     <div class="text-white flex flex-col gap-6">
 
       <!-- PRODUCT NAME -->
-      <h1 class="text-4xl font-extrabold leading-tight">
+      <h1 class="text-4xl md:text-5xl font-extrabold leading-tight">
         <%= product.name %>
       </h1>
 
       <!-- DESCRIPTION -->
-      <p class="opacity-90 leading-relaxed text-lg">
+      <p class="opacity-90 leading-relaxed text-lg md:text-xl">
         <%= product.description %>
       </p>
 
       <!-- PRICE CARD -->
-      <div class="bg-white/15 rounded-2xl p-6 backdrop-blur-md flex flex-col gap-3 shadow-xl">
+      <div class="bg-white/15 rounded-2xl p-6 md:p-8 backdrop-blur-md flex flex-col gap-3 shadow-xl">
 
         <div class="flex items-end gap-4">
-          <span class="text-4xl font-extrabold text-yellow-300">
+          <span class="text-4xl md:text-5xl font-extrabold text-yellow-300">
             ₹<%= product.finalPrice %>
           </span>
 
           <% if(product.discount > 0){ %>
-            <span class="line-through opacity-60 text-lg">
+            <span class="line-through opacity-60 text-lg md:text-xl">
               ₹<%= product.price %>
             </span>
-            <span class="bg-green-500/20 text-green-200 px-3 py-1 rounded-full text-sm font-semibold">
+            <span class="bg-green-500/20 text-green-200 px-3 py-1 rounded-full text-sm md:text-base font-semibold">
               <%= product.discount %>% OFF
             </span>
           <% } %>
         </div>
 
-        <p class="text-sm opacity-80">
+        <p class="text-sm md:text-base opacity-80">
           Inclusive of all taxes • Free delivery available
         </p>
       </div>
 
       <!-- ACTION BUTTONS -->
-      <div class="flex gap-4 mt-4">
-
+      <div class="flex flex-col sm:flex-row gap-4 mt-4">
         <button onclick="addToCart('<%= product._id %>')"
-          class="flex-1 py-4 rounded-2xl font-bold text-lg
+          class="flex-1 py-4 rounded-2xl font-bold text-lg md:text-xl
                  bg-gradient-to-r from-yellow-300 to-orange-400
                  text-black hover:scale-[1.03] transition shadow-xl">
           🛒 Add to Cart
         </button>
 
         <a href="/checkout"
-           class="flex-1 py-4 rounded-2xl text-center font-bold text-lg
+           class="flex-1 py-4 rounded-2xl text-center font-bold text-lg md:text-xl
                   bg-white text-black hover:scale-[1.03] transition shadow-xl">
           ⚡ Buy Now
         </a>
       </div>
 
       <!-- TRUST INFO -->
-      <div class="flex gap-6 mt-4 text-sm opacity-90">
+      <div class="flex flex-wrap gap-6 mt-4 text-sm md:text-base opacity-90">
         <span>✅ 100% Original</span>
         <span>🚚 Fast Delivery</span>
         <span>🔁 Easy Returns</span>
@@ -129,17 +164,6 @@ function showToast(msg, type="success"){
     setTimeout(() => t.remove(), 500);
   }, 2500);
 }
-
-// SLIDE-IN ANIMATION
-const style = document.createElement('style');
-style.innerHTML = `
-@keyframes slideIn {
-  0% { transform: translateX(100%); opacity: 0; }
-  100% { transform: translateX(0); opacity: 1; }
-}
-.animate-slideIn { animation: slideIn 0.3s ease forwards; }
-`;
-document.head.appendChild(style);
 </script>
 
 <%- include('./partials/footer') %>
