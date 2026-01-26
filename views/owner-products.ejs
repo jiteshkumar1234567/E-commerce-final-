@@ -1,0 +1,73 @@
+<%- include('./partials/header') %>
+
+<section class="min-h-screen pt-32 px-6 bg-gradient-to-br from-indigo-700 via-purple-700 to-pink-600 text-white">
+
+  <div class="max-w-7xl mx-auto">
+
+    <!-- Heading + Add Product -->
+    <div class="flex flex-col md:flex-row justify-between items-center mb-12 gap-4">
+      <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight">
+        <span class="text-yellow-300">Products</span>
+      </h1>
+      <a href="/owners/add-product"
+         class="flex items-center gap-2 px-6 py-3 rounded-2xl font-semibold
+                bg-gradient-to-r from-yellow-300 to-orange-400
+                text-zinc-900 hover:scale-105 transition shadow-lg">
+        <i class="ri-add-line text-lg"></i> Add Product
+      </a>
+    </div>
+
+    <% if(products.length === 0){ %>
+      <div class="bg-white/10 backdrop-blur-2xl border border-white/20
+                  rounded-3xl text-center py-20">
+        <p class="text-white/70 text-xl">No products yet!</p>
+      </div>
+    <% } else { %>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+
+        <% products.forEach(product => { %>
+          <div class="bg-white/10 backdrop-blur-2xl border border-white/20
+                      rounded-3xl p-6 hover:bg-white/20 transition flex flex-col items-center shadow-xl">
+
+            <!-- Product Image -->
+           <img
+  src="<%= product.images?.[0] || '/images/fallback.png' %>"
+  class="w-40 h-40 rounded-2xl object-cover mb-4 border-2 border-white/30 shadow-md"
+/>
+
+            <!-- Product Info -->
+            <h3 class="text-xl font-bold mb-1"><%= product.name %></h3>
+            <p class="text-white/80 mb-1">₹ <%= product.finalPrice %></p>
+            <% if(product.discount && product.discount > 0){ %>
+              <p class="text-green-400 font-semibold mb-2"><i class="ri-discount-line"></i> <%= product.discount %>% OFF</p>
+            <% } %>
+
+            <!-- Actions -->
+            <div class="flex gap-4 mt-auto w-full justify-center">
+
+              <a href="/owners/products/edit/<%= product._id %>"
+                 class="flex items-center gap-1 px-4 py-2 rounded-lg bg-blue-500 text-white font-semibold hover:bg-blue-600 transition shadow-md">
+                <i class="ri-edit-2-line"></i> Edit
+              </a>
+
+              <form action="/owners/products/delete/<%= product._id %>" method="POST" class="inline">
+                <button type="submit"
+                        class="flex items-center gap-1 px-4 py-2 rounded-lg bg-red-500 text-white font-semibold hover:bg-red-600 transition shadow-md">
+                  <i class="ri-delete-bin-line"></i> Delete
+                </button>
+              </form>
+
+            </div>
+
+          </div>
+        <% }) %>
+
+      </div>
+    <% } %>
+
+  </div>
+
+</section>
+
+<!-- REMINDER: Include Remixicon CDN if not already included in header -->
+<script src="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.js"></script>

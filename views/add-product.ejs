@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Add Product</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="min-h-screen bg-gradient-to-br from-indigo-800 via-purple-800 to-pink-700
+             text-white flex items-center justify-center px-4 py-8">
+
+<style>
+  select { color-scheme: dark; }
+  select option { background-color: #020617; color: #ffffff; }
+</style>
+
+<div class="w-full max-w-xl bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl p-8">
+
+  <h1 class="text-3xl font-extrabold text-center mb-1">➕ Add Product</h1>
+  <p class="text-center text-white/70 mb-6 text-sm">Enter product details</p>
+
+  <form action="/owners/add-product" method="POST" enctype="multipart/form-data" class="space-y-4">
+
+    <!-- PRODUCT NAME -->
+    <div>
+      <label class="block mb-1 text-sm font-semibold">Product Name</label>
+      <input type="text" name="name" required placeholder="iPhone 15 Pro"
+        class="w-full p-3 rounded-lg bg-white/20 placeholder-white/50 text-white outline-none focus:ring-2 focus:ring-yellow-300" />
+    </div>
+
+    <!-- DESCRIPTION -->
+    <div>
+      <label class="block mb-1 text-sm font-semibold">Description</label>
+      <textarea
+        name="description"
+        required
+        rows="4"
+        placeholder="Features, specifications, warranty..."
+        class="w-full p-3 rounded-lg bg-white/20 placeholder-white/50 text-white outline-none focus:ring-2 focus:ring-yellow-300 resize-none"
+      ></textarea>
+    </div>
+
+    <!-- IMAGE + PRICE -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+      <div>
+        <label class="block mb-1 text-sm font-semibold">Images</label>
+        <input type="file" name="images" multiple required
+          class="w-full p-2.5 rounded-lg bg-white/20 text-white outline-none focus:ring-2 focus:ring-yellow-300" />
+      </div>
+
+      <div>
+        <label class="block mb-1 text-sm font-semibold">Price (₹)</label>
+        <input type="number" name="price" required placeholder="50000"
+          class="w-full p-3 rounded-lg bg-white/20 text-white outline-none focus:ring-2 focus:ring-yellow-300" />
+      </div>
+    </div>
+
+    <!-- DISCOUNT + CATEGORY -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+      <div>
+        <label class="block mb-1 text-sm font-semibold">Discount (%)</label>
+        <input type="number" name="discount" max="35" placeholder="10"
+          class="w-full p-3 rounded-lg bg-white/20 text-white outline-none focus:ring-2 focus:ring-yellow-300" />
+      </div>
+
+      <div>
+        <label class="block mb-1 text-sm font-semibold">Category</label>
+        <select id="categorySelect"
+          class="w-full p-3 rounded-lg bg-white/20 text-white border border-white/20 outline-none focus:ring-2 focus:ring-cyan-400">
+          <option value="">Select</option>
+          <option value="mobiles">📱 Mobiles</option>
+          <option value="laptops">💻 Laptops</option>
+          <option value="headphones">🎧 Headphones</option>
+          <option value="accessories">🔌 Accessories</option>
+          <option value="smartwatches">⌚ Smart Watches</option>
+          <option value="gaming">🎮 Gaming</option>
+          <option value="custom">✍️ Other</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- CUSTOM CATEGORY -->
+    <input type="text" id="customCategory" placeholder="Enter custom category"
+      class="hidden w-full p-3 rounded-lg bg-white/20 text-white outline-none focus:ring-2 focus:ring-yellow-300" />
+
+    <input type="hidden" name="category" id="finalCategory" required />
+
+    <!-- SUBMIT -->
+    <button type="submit"
+      class="w-full py-3 mt-4 rounded-xl font-bold text-black
+             bg-gradient-to-r from-yellow-300 to-orange-400
+             hover:scale-[1.02] transition shadow-lg">
+      🚀 Add Product
+    </button>
+
+  </form>
+
+  <a href="/owners/dashboard"
+    class="block text-center mt-5 text-white/70 hover:text-white text-sm">← Back to Dashboard</a>
+</div>
+
+<script>
+  const categorySelect = document.getElementById("categorySelect");
+  const customCategory = document.getElementById("customCategory");
+  const finalCategory = document.getElementById("finalCategory");
+
+  categorySelect.addEventListener("change", () => {
+    if (categorySelect.value === "custom") {
+      customCategory.classList.remove("hidden");
+      finalCategory.value = "";
+    } else {
+      customCategory.classList.add("hidden");
+      finalCategory.value = categorySelect.value;
+    }
+  });
+
+  customCategory.addEventListener("input", () => {
+    finalCategory.value = customCategory.value.toLowerCase().trim();
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,124 @@
+<%- include('./partials/header') %>
+
+<!-- Toast container -->
+<div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-3"></div>
+
+<section class="min-h-screen flex items-center justify-center pt-24 pb-24 px-6 relative overflow-hidden">
+
+  <!-- BACKGROUND -->
+  <div class="absolute inset-0 bg-gradient-to-br from-indigo-700 via-purple-700 to-pink-600"></div>
+
+  <!-- GLOWS -->
+  <div class="absolute w-96 h-96 bg-yellow-400/30 blur-[140px] rounded-full -top-20 -left-20"></div>
+  <div class="absolute w-96 h-96 bg-pink-400/30 blur-[140px] rounded-full -bottom-20 -right-20"></div>
+
+  <!-- CARD -->
+  <div class="relative z-10 w-full max-w-md bg-white/15 backdrop-blur-3xl
+              border border-white/20 rounded-3xl shadow-2xl p-8">
+
+    <span class="inline-block mb-4 px-5 py-1.5 rounded-full bg-white/20 text-sm text-white">
+      Join Scatch
+    </span>
+
+    <h1 class="text-3xl font-extrabold leading-tight">
+      <span class="text-white">Create your</span>
+      <span class="bg-gradient-to-r from-yellow-300 to-orange-400 bg-clip-text text-transparent">
+        Account
+      </span>
+    </h1>
+
+    <p class="mt-2 text-sm text-white/80">
+     Smart Devices, Smarter You – Explore Our Premium Electronics Collection.
+    </p>
+
+    <!-- FORM -->
+    <form action="/users/register" method="post" class="mt-6 space-y-3">
+
+      <!-- Full Name -->
+      <div class="relative">
+        <input
+          type="text"
+          name="fullname"
+          required
+          placeholder="Full Name"
+          class="w-full px-5 py-3.5 pl-11 rounded-xl outline-none bg-white/90 text-zinc-900 placeholder-zinc-500 text-sm"
+        />
+        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-sm">👤</span>
+      </div>
+
+      <!-- Email -->
+      <div class="relative">
+        <input
+          type="email"
+          name="email"
+          required
+          placeholder="Email Address"
+          class="w-full px-5 py-3.5 pl-11 rounded-xl outline-none bg-white/90 text-zinc-900 placeholder-zinc-500 text-sm"
+        />
+        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-sm">📧</span>
+      </div>
+
+      <!-- Password -->
+      <div class="relative">
+        <input
+          type="password"
+          name="password"
+          required
+          placeholder="Password"
+          class="w-full px-5 py-3.5 pl-11 rounded-xl outline-none bg-white/90 text-zinc-900 placeholder-zinc-500 text-sm"
+        />
+        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-sm">🔒</span>
+      </div>
+
+      <button
+        class="w-full mt-3 py-3.5 rounded-xl font-semibold text-sm text-zinc-900
+               bg-gradient-to-r from-yellow-300 to-orange-400
+               hover:translate-y-[-2px] hover:shadow-xl transition">
+        Create Account →
+      </button>
+
+    </form>
+
+    <p class="mt-4 text-center text-white/70 text-xs">
+      Already have an account?
+      <a href="/users/login" class="text-yellow-300 hover:underline">
+        Login
+      </a>
+    </p>
+
+  </div>
+</section>
+
+<!-- Toast JS -->
+<script>
+function showToast(message, type = "success") {
+  const container = document.getElementById("toast-container");
+  const toast = document.createElement("div");
+  toast.className = `
+    max-w-xs w-full px-6 py-4 rounded-xl shadow-2xl text-white font-semibold 
+    transform transition-all duration-500
+    ${type === "success" ? "bg-green-500" : "bg-red-500"}
+    animate-slide-in
+  `;
+  toast.textContent = message;
+  container.appendChild(toast);
+  setTimeout(() => {
+    toast.classList.add("animate-slide-out");
+    toast.addEventListener("animationend", () => toast.remove());
+  }, 3000);
+}
+
+// ✅ Trigger toast if server sent a message
+<% if (typeof toastMsg !== "undefined") { %>
+  showToast("<%= toastMsg %>", "<%= toastType %>");
+<% } %>
+</script>
+
+<style>
+@keyframes slide-in { 0% { transform: translateX(120%); opacity:0; } 100% { transform: translateX(0); opacity:1; } }
+@keyframes slide-out { 0% { transform: translateX(0); opacity:1; } 100% { transform: translateX(120%); opacity:0; } }
+.animate-slide-in { animation: slide-in 0.5s ease-out forwards; }
+.animate-slide-out { animation: slide-out 0.5s ease-in forwards; }
+</style>
+
+

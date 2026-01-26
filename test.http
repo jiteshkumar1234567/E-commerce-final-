@@ -1,0 +1,41 @@
+### Create Owner
+
+# POST http://localhost:3000/owners/create
+# Content-Type: application/json
+
+# {
+#   "fullname": "Jitesh Kumar",
+#   "email": "yjitesh3203@gmail.com",
+#   "password": "000000"
+# }
+
+
+ ### user create
+
+# POST http://localhost:3000/users/register
+# Content-Type: application/json
+
+# {
+#   "fullname": "Jitesh",
+#   "email": "jite@gmail.com",
+#   "password": "jitesh123"
+# }
+
+
+
+# ### Add a new product
+
+POST http://localhost:3000/products
+Content-Type: application/json
+
+{
+  "name": "Premium Travel Backpack",
+  "image": "https://images.unsplash.com/photo-1593032465174-2e5c4f9f38c2?q=80&w=1170&auto=format&fit=crop",
+  "price": 5999,
+  "discount": 25,
+  "bgColor": "#e0f7fa",
+  "panelColor": "#ffffff",
+  "textColor": "#006064"
+}
+
+

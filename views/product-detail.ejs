@@ -1,0 +1,145 @@
+<%- include('./partials/header') %>
+
+<section class="pt-32 pb-24 px-6 min-h-screen bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500">
+  <div class="max-w-6xl mx-auto bg-white/20 backdrop-blur-xl rounded-3xl p-10 grid grid-cols-1 md:grid-cols-2 gap-12">
+
+    <!-- ================= IMAGES ================= -->
+    <div>
+      <img id="mainImg"
+           src="<%= product.images[0] %>"
+           class="w-full h-[420px] object-cover rounded-3xl shadow-2xl">
+
+      <div class="flex gap-4 mt-6 flex-wrap">
+        <% product.images.forEach(img => { %>
+          <img src="<%= img %>"
+               onclick="changeImg(this.src)"
+               class="w-24 h-24 object-cover rounded-xl cursor-pointer
+                      border-2 border-white/30 hover:border-yellow-300
+                      hover:scale-105 transition">
+        <% }) %>
+      </div>
+    </div>
+
+    <!-- ================= DETAILS ================= -->
+    <div class="text-white flex flex-col gap-6">
+
+      <!-- PRODUCT NAME -->
+      <h1 class="text-4xl font-extrabold leading-tight">
+        <%= product.name %>
+      </h1>
+
+      <!-- DESCRIPTION -->
+      <p class="opacity-90 leading-relaxed text-lg">
+        <%= product.description %>
+      </p>
+
+      <!-- PRICE CARD -->
+      <div class="bg-white/15 rounded-2xl p-6 backdrop-blur-md flex flex-col gap-3 shadow-xl">
+
+        <div class="flex items-end gap-4">
+          <span class="text-4xl font-extrabold text-yellow-300">
+            ₹<%= product.finalPrice %>
+          </span>
+
+          <% if(product.discount > 0){ %>
+            <span class="line-through opacity-60 text-lg">
+              ₹<%= product.price %>
+            </span>
+            <span class="bg-green-500/20 text-green-200 px-3 py-1 rounded-full text-sm font-semibold">
+              <%= product.discount %>% OFF
+            </span>
+          <% } %>
+        </div>
+
+        <p class="text-sm opacity-80">
+          Inclusive of all taxes • Free delivery available
+        </p>
+      </div>
+
+      <!-- ACTION BUTTONS -->
+      <div class="flex gap-4 mt-4">
+
+        <button onclick="addToCart('<%= product._id %>')"
+          class="flex-1 py-4 rounded-2xl font-bold text-lg
+                 bg-gradient-to-r from-yellow-300 to-orange-400
+                 text-black hover:scale-[1.03] transition shadow-xl">
+          🛒 Add to Cart
+        </button>
+
+        <a href="/checkout"
+           class="flex-1 py-4 rounded-2xl text-center font-bold text-lg
+                  bg-white text-black hover:scale-[1.03] transition shadow-xl">
+          ⚡ Buy Now
+        </a>
+      </div>
+
+      <!-- TRUST INFO -->
+      <div class="flex gap-6 mt-4 text-sm opacity-90">
+        <span>✅ 100% Original</span>
+        <span>🚚 Fast Delivery</span>
+        <span>🔁 Easy Returns</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- TOAST -->
+<div id="toast-container" class="fixed top-6 right-6 space-y-2 z-50"></div>
+
+<script>
+function changeImg(src){
+  document.getElementById("mainImg").src = src;
+}
+
+// ================= ADD TO CART =================
+async function addToCart(id){
+  try{
+    const res = await fetch(`/cart/add/${id}`, { method: "POST" });
+    const data = await res.json();
+
+    if(data.success){
+      showToast("Product added to cart", "success");
+    } else {
+      showToast(data.message || "Cannot add to cart", "error");
+    }
+  } catch(err){
+    console.error(err);
+    showToast("Please login first", "error");
+  }
+}
+
+// ================= TOAST FUNCTION =================
+function showToast(msg, type="success"){
+  const t = document.createElement("div");
+
+  t.className = `
+    px-5 py-3 rounded-xl text-white shadow-xl flex items-center gap-2
+    animate-slideIn ${type === "error" ? "bg-red-500" : "bg-green-500"}
+  `;
+  t.innerHTML = `
+    <span class="text-xl">${type === "error" ? "❌" : "🛒"}</span>
+    <span>${msg}</span>
+  `;
+
+  document.getElementById("toast-container").appendChild(t);
+
+  setTimeout(() => {
+    t.classList.add("opacity-0", "transition-opacity", "duration-500");
+    setTimeout(() => t.remove(), 500);
+  }, 2500);
+}
+
+// SLIDE-IN ANIMATION
+const style = document.createElement('style');
+style.innerHTML = `
+@keyframes slideIn {
+  0% { transform: translateX(100%); opacity: 0; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+.animate-slideIn { animation: slideIn 0.3s ease forwards; }
+`;
+document.head.appendChild(style);
+</script>
+
+<%- include('./partials/footer') %>

@@ -1,0 +1,236 @@
+<%- include('./partials/header') %>
+
+<style>
+@keyframes slideIn {
+  0% { transform: translateX(100%); opacity: 0; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+.animate-slideIn {
+  animation: slideIn 0.3s ease forwards;
+}
+</style>
+
+<section class="min-h-screen pt-32 px-6
+                bg-gradient-to-br from-indigo-700 via-purple-700 to-pink-600
+                text-white">
+
+  <div class="max-w-5xl mx-auto">
+
+    <!-- Heading -->
+    <h1 class="text-4xl md:text-5xl font-extrabold mb-12 tracking-tight">
+      <span class="text-yellow-300">Your Cart</span>
+    </h1>
+
+    <% const cartItemsSafe = typeof cartItems !== 'undefined' ? cartItems : []; %>
+    <% let total = 0; %>
+
+    <% if(cartItemsSafe.length === 0){ %>
+
+      <div class="bg-white/10 backdrop-blur-2xl border border-white/20
+                  rounded-3xl text-center py-20">
+        <p class="text-white/70 text-xl">Your cart is empty!</p>
+      </div>
+
+    <% } else { %>
+
+      <% cartItemsSafe.forEach(item => { %>
+        <% total += item.product.finalPrice * item.quantity %>
+
+        <div class="flex items-center gap-6 mb-6
+                    bg-white/10 backdrop-blur-2xl border border-white/20
+                    rounded-3xl p-6 hover:bg-white/15 transition cart-item"
+             data-product-id="<%= item.product._id %>">
+
+          <!-- Product Image -->
+   <img
+  src="<%= item.product.images && item.product.images.length ? item.product.images[0] : '/images/fallback.png' %>"
+  class="w-24 h-24 rounded-2xl object-cover border border-white/20"
+/>
+
+
+          <!-- Info -->
+          <div class="flex-1">
+            <h3 class="text-xl font-semibold">
+              <%= item.product.name %>
+            </h3>
+
+            <!-- Quantity Controls -->
+            <div class="mt-3 flex items-center gap-4">
+
+              <button
+                class="qty-btn decrease px-4 py-2 rounded-lg bg-white/20 hover:bg-white/30"
+                data-id="<%= item.product._id %>">
+                −
+              </button>
+
+              <span class="quantity text-lg font-semibold">
+                <%= item.quantity %>
+              </span>
+
+              <button
+                class="qty-btn increase px-4 py-2 rounded-lg bg-white/20 hover:bg-white/30"
+                data-id="<%= item.product._id %>">
+                +
+              </button>
+
+              <span class="ml-4 text-white/80">
+               <b>Single product</b> ₹ <%= item.product.finalPrice %>
+              </span>
+
+            </div>
+          </div>
+
+          <!-- Remove -->
+          <form class="remove-item-form" action="/cart/remove/<%= item.product._id %>" method="POST">
+            <button type="submit"
+              class="px-6 py-3 rounded-xl
+                     bg-white/10 hover:bg-red-500
+                     text-white/80 hover:text-white
+                     transition">
+              Remove
+            </button>
+          </form>
+
+        </div>
+      <% }) %>
+
+      <!-- TOTAL AND CHECKOUT -->
+      <div class="mt-14 mb-10 flex justify-between items-center
+                  bg-white/15 backdrop-blur-2xl border border-white/20
+                  rounded-3xl p-8">
+
+        <h2 class="text-2xl font-bold">
+          Total:
+          <span class="text-yellow-300">₹ <%= total %></span>
+        </h2>
+
+        <a href="/checkout"
+           class="px-12 py-4 rounded-2xl font-semibold
+                  bg-gradient-to-r from-yellow-300 to-orange-400
+                  text-zinc-900 hover:scale-105 transition">
+          Checkout
+        </a>
+      </div>
+
+    <% } %>
+
+  </div>
+</section>
+
+<!-- TOAST CONTAINER -->
+<div id="toast-container" class="fixed top-6 right-6 space-y-2 z-50"></div>
+
+<script>
+// Toast
+function showToast(msg, type="success") {
+  const t = document.createElement("div");
+  t.className = `
+    px-5 py-3 rounded-xl text-white shadow-xl
+    flex items-center gap-2 animate-slideIn
+    ${type === "error" ? "bg-red-500" : "bg-green-500"}
+  `;
+  t.innerHTML = `
+    <span class="text-xl">${type === "error" ? "❌" : "✅"}</span>
+    <span>${msg}</span>
+  `;
+  document.getElementById("toast-container").appendChild(t);
+
+  setTimeout(() => {
+    t.classList.add("opacity-0", "transition-opacity", "duration-500");
+    setTimeout(() => t.remove(), 500);
+  }, 2500);
+}
+
+
+// REMOVE ITEM
+document.querySelectorAll(".remove-item-form").forEach(form => {
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    try {
+      const res = await fetch(form.action, { method: "POST" });
+      const data = await res.json();
+
+      if (!data.success) {
+        showToast("Something went wrong", "error");
+        return;
+      }
+
+      const card = form.closest(".cart-item");
+      card.remove();
+
+      showToast("Item removed", "success");
+
+      document.querySelector("h2 span.text-yellow-300").innerText =
+        "₹ " + data.newTotal;
+
+      if (document.querySelectorAll(".cart-item").length === 0) {
+        document.querySelector(".max-w-5xl.mx-auto").innerHTML = `
+          <div class="bg-white/10 backdrop-blur-2xl border border-white/20
+                      rounded-3xl text-center py-20">
+            <p class="text-white/70 text-xl">Your cart is empty!</p>
+          </div>`;
+      }
+
+    } catch (err) {
+      console.error(err);
+      showToast("Something went wrong", "error");
+    }
+  });
+});
+
+
+// INCREASE / DECREASE
+document.querySelectorAll(".qty-btn").forEach(btn => {
+  btn.addEventListener("click", async () => {
+
+    const productId = btn.dataset.id;
+    const isIncrease = btn.classList.contains("increase");
+    const url = isIncrease
+      ? `/cart/increase/${productId}`
+      : `/cart/decrease/${productId}`;
+
+    try {
+      const res = await fetch(url, { method: "POST" });
+      const data = await res.json();
+
+      if (!data.success) {
+        showToast("Something went wrong", "error");
+        return;
+      }
+
+      const card = btn.closest(".cart-item");
+      const qtyEl = card.querySelector(".quantity");
+      let qty = parseInt(qtyEl.innerText);
+
+      if (isIncrease) {
+        qty++;
+        qtyEl.innerText = qty;
+      } else {
+        if (qty > 1) {
+          qty--;
+          qtyEl.innerText = qty;
+        } else {
+          card.remove();
+          showToast("Item removed", "success");
+        }
+      }
+
+      document.querySelector("h2 span.text-yellow-300").innerText =
+        "₹ " + data.newTotal;
+
+      if (document.querySelectorAll(".cart-item").length === 0) {
+        document.querySelector(".max-w-5xl.mx-auto").innerHTML = `
+          <div class="bg-white/10 backdrop-blur-2xl border border-white/20
+                      rounded-3xl text-center py-20">
+            <p class="text-white/70 text-xl">Your cart is empty!</p>
+          </div>`;
+      }
+
+    } catch (err) {
+      console.error(err);
+      showToast("Something went wrong", "error");
+    }
+  });
+});
+</script>

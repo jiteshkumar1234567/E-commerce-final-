@@ -1,0 +1,119 @@
+<%- include('./partials/header') %>
+
+<!-- HEADER -->
+<section class="max-w-7xl mx-auto px-8 pt-20 pb-2">
+  <div class="bg-white/5 backdrop-blur-xl
+              border border-white/10
+              rounded-3xl p-8 shadow-xl">
+
+    <h2 class="text-4xl md:text-5xl font-extrabold leading-tight">
+      Welcome Back,
+      <span class="block mt-2
+                   bg-gradient-to-r from-yellow-300 to-orange-400
+                   bg-clip-text text-transparent">
+        <%= owner.fullname %>
+      </span>
+    </h2>
+
+    <p class="mt-4 text-white/70 text-lg">
+      Here’s a quick overview of your store performance today 🚀
+    </p>
+
+  </div>
+</section>
+
+
+  <!-- MAIN -->
+  <section class="max-w-7xl mx-auto px-8 py-10
+                  grid grid-cols-1 md:grid-cols-4 gap-8">
+
+    <!-- SIDEBAR -->
+    <aside class="md:col-span-1 space-y-4">
+
+      <% const btnClass =
+      "block w-full px-5 py-4 rounded-xl font-semibold text-black text-center \
+       bg-gradient-to-r from-yellow-300 to-orange-400 \
+       shadow-lg hover:shadow-xl hover:scale-[1.03] transition-all"; %>
+
+      <a href="/owners/add-product" class="<%= btnClass %>">➕ Add Product</a>
+      <a href="/owners/orders" class="<%= btnClass %>">📦 Orders</a>
+      <a href="/owners/products" class="<%= btnClass %>">👜 Products</a>
+      <a href="/owners/users" class="<%= btnClass %>">👥 Users</a>
+      <a href="/owners/dashboard" class="<%= btnClass %>">📊 Reports</a>
+
+    </aside>
+
+    <!-- DASHBOARD CARDS -->
+    <div class="md:col-span-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+
+      <!-- CARD -->
+      <div class="h-40 rounded-2xl bg-white/10 backdrop-blur-xl
+                  border border-white/20 shadow-xl
+                  flex items-center px-6 gap-5
+                  hover:scale-[1.03] hover:bg-white/20 transition-all">
+
+        <div class="w-16 h-16 rounded-xl
+                    bg-gradient-to-br from-yellow-300 to-orange-400
+                    flex items-center justify-center text-3xl text-black">
+          📦
+        </div>
+
+        <div>
+          <p class="text-sm uppercase tracking-widest text-white/60">
+            Total Orders
+          </p>
+          <h2 class="text-4xl font-extrabold mt-1">
+            <%= totalOrders || 0 %>
+          </h2>
+        </div>
+      </div>
+
+      <!-- CARD -->
+      <div class="h-40 rounded-2xl bg-white/10 backdrop-blur-xl
+                  border border-white/20 shadow-xl
+                  flex items-center px-6 gap-5
+                  hover:scale-[1.03] hover:bg-white/20 transition-all">
+
+        <div class="w-16 h-16 rounded-xl
+                    bg-gradient-to-br from-purple-400 to-pink-400
+                    flex items-center justify-center text-3xl text-black">
+          👥
+        </div>
+
+        <div>
+          <p class="text-sm uppercase tracking-widest text-white/60">
+            Total Users
+          </p>
+          <h2 class="text-4xl font-extrabold mt-1">
+            <%= totalUsers || 0 %>
+          </h2>
+        </div>
+      </div>
+
+      <!-- CARD -->
+      <div class="h-40 rounded-2xl bg-white/10 backdrop-blur-xl
+                  border border-white/20 shadow-xl
+                  flex items-center px-6 gap-5
+                  hover:scale-[1.03] hover:bg-white/20 transition-all">
+
+        <div class="w-16 h-16 rounded-xl
+                    bg-gradient-to-br from-pink-400 to-red-400
+                    flex items-center justify-center text-3xl text-black">
+          👜
+        </div>
+
+        <div>
+          <p class="text-sm uppercase tracking-widest text-white/60">
+            Total Products
+          </p>
+          <h2 class="text-4xl font-extrabold mt-1">
+            <%= totalProducts || 0 %>
+          </h2>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</body>
+</html>

@@ -1,0 +1,107 @@
+<%- include('./partials/header') %>
+
+<section class="min-h-screen pt-32 px-6
+                bg-gradient-to-br from-indigo-700 via-purple-700 to-pink-600
+                text-white">
+
+  <div class="max-w-7xl mx-auto">
+    <h1 class="text-4xl md:text-5xl font-extrabold mb-12 tracking-tight">
+      <span class="text-yellow-300">All Orders</span>
+    </h1>
+
+    <% if(orders.length === 0){ %>
+      <div class="bg-white/10 backdrop-blur-2xl border border-white/20
+                  rounded-3xl text-center py-20">
+        <p class="text-white/70 text-xl">No orders yet!</p>
+      </div>
+    <% } else { %>
+
+      <% orders.forEach(order => { %>
+        <div class="bg-white/10 backdrop-blur-2xl border border-white/20
+                    rounded-3xl p-6 mb-6 hover:bg-white/15 transition">
+
+          <!-- User Info -->
+          <div class="mb-4">
+            <h3 class="font-semibold text-xl">
+              <span class="text-yellow-300">User:</span> <%= order.user?.fullname || "Deleted User" %>
+            </h3>
+            <p class="text-white/70"><%= order.user?.email || "N/A" %></p>
+          </div>
+
+          <!-- Items -->
+          <div class="space-y-2 mb-4">
+            <% order.items.forEach(item => { %>
+              <% if(item.product){ %> <!-- ✅ Null safe -->
+                <div class="flex items-center justify-between gap-4
+                            bg-white/10 backdrop-blur-2xl border border-white/20
+                            rounded-2xl p-4 hover:bg-white/15 transition">
+                  <div class="flex items-center gap-4">
+                 <img
+  src="<%= item.product.images && item.product.images.length > 0
+        ? item.product.images[0]
+        : '/images/no-image.png' %>"
+  class="w-16 h-16 rounded-xl object-cover"
+/>
+                    <p class="text-white font-semibold"><%= item.product.name %></p>
+                  </div>
+                  <p class="text-white/80">Qty: <%= item.quantity %></p>
+    <p class="font-bold text-white">
+          ₹ <%= item.product.finalPrice %>  <!-- ✅ single product price -->
+        </p>
+                </div>
+              <% } else { %>
+                <div class="flex items-center justify-between gap-4
+                            bg-white/10 backdrop-blur-2xl border border-white/20
+                            rounded-2xl p-4">
+                  <p class="text-white/70 italic">Product deleted from database</p>
+                </div>
+              <% } %>
+            <% }) %>
+          </div>
+
+          <!-- Total -->
+          <div class="flex justify-between items-center mt-4 font-semibold">
+            <p class="text-white">Total Amount:</p>
+            <p class="text-yellow-300 text-lg">₹ <%= order.totalAmount %></p>
+          </div>
+
+          <!-- Status & Order Date -->
+          <div class="mt-4 flex flex-col md:flex-row md:justify-between md:items-center gap-2">
+            <p class="text-white/60 text-sm">
+              Ordered on: <%= order.orderDate.toDateString() %>
+            </p>
+
+            <!-- Status Update Form -->
+            <form action="/owners/orders/update-status/<%= order._id %>" method="POST" class="flex gap-2 items-center">
+              <select name="status" class="px-3 py-2 rounded-lg font-semibold text-black">
+                <option value="Pending" <%= order.status === 'Pending' ? 'selected' : '' %>>Pending</option>
+                <option value="Shipped" <%= order.status === 'Shipped' ? 'selected' : '' %>>Shipped</option>
+                <option value="Delivered" <%= order.status === 'Delivered' ? 'selected' : '' %>>Delivered</option>
+              </select>
+              <button type="submit"
+                      class="px-4 py-2 rounded-lg font-semibold 
+                             text-black bg-yellow-300 hover:bg-orange-400 transition">
+                Update
+              </button>
+            </form>
+          </div>
+
+          <!-- Status Label -->
+          <p class="mt-2 text-sm">
+            Status: 
+            <% if(order.status === 'Pending'){ %>
+              <span class="px-2 py-1 rounded bg-yellow-300 text-black font-semibold">Pending</span>
+            <% } else if(order.status === 'Shipped'){ %>
+              <span class="px-2 py-1 rounded bg-blue-400 text-white font-semibold">Shipped</span>
+            <% } else if(order.status === 'Delivered'){ %>
+              <span class="px-2 py-1 rounded bg-green-500 text-white font-semibold">Delivered</span>
+            <% } %>
+          </p>
+
+        </div>
+      <% }) %>
+
+    <% } %>
+  </div>
+
+</section>
