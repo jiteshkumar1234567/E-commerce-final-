@@ -21,8 +21,7 @@
     p { font-size: 0.9rem !important; }
     #mainImg { height: 220px !important; }
     .flex.gap-4.mt-6.flex-wrap img { width: 22% !important; }
-    .flex.gap-4.mt-4 button,
-    .flex.gap-4.mt-4 a {
+    .flex.gap-4.mt-4 button {
       font-size: 0.9rem !important;
       padding: 0.8rem !important;
     }
@@ -34,24 +33,66 @@
     100% { transform: translateX(0); opacity: 1; }
   }
   .animate-slideIn { animation: slideIn 0.3s ease forwards; }
+
+  /* PREMIUM LOOK */
+  .premium-card {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(25px);
+    border-radius: 2rem;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .premium-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
+  }
+
+  #mainImg {
+    border-radius: 2rem;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    transition: transform 0.3s ease;
+  }
+  #mainImg:hover { transform: scale(1.02); }
+
+  .thumbnail:hover {
+    border-color: #facc15;
+    transform: scale(1.05);
+  }
+
+  .add-cart-btn {
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+    color: black;
+    font-weight: 700;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .add-cart-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+  }
+
+  .trust-info span {
+    background: rgba(255,255,255,0.1);
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    transition: transform 0.2s ease;
+  }
+  .trust-info span:hover { transform: scale(1.05); }
 </style>
 
-<section class="pt-32 pb-24 px-6 min-h-screen bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500">
-  <div class="max-w-6xl mx-auto bg-white/20 backdrop-blur-xl rounded-3xl p-6 md:p-10 grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-12">
+<section class="pt-32 pb-24 px-6 min-h-screen bg-gradient-to-br from-indigo-800 via-purple-700 to-pink-700">
+  <div class="max-w-6xl mx-auto premium-card p-6 md:p-10 grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-12">
 
     <!-- ================= IMAGES ================= -->
     <div>
       <img id="mainImg"
            src="<%= product.images[0] %>"
-           class="w-full h-[420px] md:h-[420px] object-cover rounded-3xl shadow-2xl">
+           class="w-full h-[420px] md:h-[420px] object-cover shadow-2xl">
 
       <div class="flex gap-4 mt-6 flex-wrap justify-start">
         <% product.images.forEach(img => { %>
           <img src="<%= img %>"
                onclick="changeImg(this.src)"
-               class="w-24 h-24 object-cover rounded-xl cursor-pointer
-                      border-2 border-white/30 hover:border-yellow-300
-                      hover:scale-105 transition">
+               class="w-24 h-24 object-cover cursor-pointer border-2 border-white/30 thumbnail transition">
         <% }) %>
       </div>
     </div>
@@ -70,10 +111,10 @@
       </p>
 
       <!-- PRICE CARD -->
-      <div class="bg-white/15 rounded-2xl p-6 md:p-8 backdrop-blur-md flex flex-col gap-3 shadow-xl">
+      <div class="premium-card p-6 md:p-8 flex flex-col gap-3">
 
         <div class="flex items-end gap-4">
-          <span class="text-4xl md:text-5xl font-extrabold text-yellow-300">
+          <span class="text-4xl md:text-5xl font-extrabold text-yellow-400">
             ₹<%= product.finalPrice %>
           </span>
 
@@ -92,24 +133,16 @@
         </p>
       </div>
 
-      <!-- ACTION BUTTONS -->
+      <!-- ADD TO CART BUTTON -->
       <div class="flex flex-col sm:flex-row gap-4 mt-4">
         <button onclick="addToCart('<%= product._id %>')"
-          class="flex-1 py-4 rounded-2xl font-bold text-lg md:text-xl
-                 bg-gradient-to-r from-yellow-300 to-orange-400
-                 text-black hover:scale-[1.03] transition shadow-xl">
+          class="flex-1 py-4 rounded-2xl font-bold text-lg md:text-xl add-cart-btn shadow-xl">
           🛒 Add to Cart
         </button>
-
-        <a href="/checkout"
-           class="flex-1 py-4 rounded-2xl text-center font-bold text-lg md:text-xl
-                  bg-white text-black hover:scale-[1.03] transition shadow-xl">
-          ⚡ Buy Now
-        </a>
       </div>
 
       <!-- TRUST INFO -->
-      <div class="flex flex-wrap gap-6 mt-4 text-sm md:text-base opacity-90">
+      <div class="flex flex-wrap gap-6 mt-4 text-sm md:text-base opacity-90 trust-info">
         <span>✅ 100% Original</span>
         <span>🚚 Fast Delivery</span>
         <span>🔁 Easy Returns</span>
