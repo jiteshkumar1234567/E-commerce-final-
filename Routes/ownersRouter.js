@@ -44,12 +44,19 @@ router.get("/dashboard", isOwner, ownerDashboard);
 /* ADD PRODUCT PAGE */
 router.get("/add-product", isOwner, (req, res) => {
   res.render("add-product", {
-    owner: req.session.owner
+    owner: req.session.owner || {},
+    error: req.query.error || false,
+    success: req.query.success || false
   });
 });
 
-/* ADD PRODUCT POST */
-router.post("/add-product",upload.array('images', 5), isOwner, addProduct);
+router.post(
+  "/add-product",
+  isOwner,
+  upload.array("images", 5),
+  addProduct
+);
+
 
 // ---------------- VIEW ALL ORDERS ----------------
 router.get("/orders", isOwner, async (req, res) => {

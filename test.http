@@ -25,7 +25,7 @@
 
 # ### Add a new product
 
-POST http://localhost:3000/products
+POST http://localhost:3000/owners/add-product
 Content-Type: application/json
 
 {

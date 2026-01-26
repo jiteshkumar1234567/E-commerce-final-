@@ -5,9 +5,9 @@ require('dotenv').config();
 
 // Cloudinary config
 cloudinary.config({
-  cloud_name: 'dr7whwiih',
-  api_key: '269978581352322',
-  api_secret: 'px1bgsJiGnCx0BUQ4-fPyeLczcI',
+  cloud_name: process.env.CLOUD_NAME || 'dr7whwiih',
+  api_key: process.env.CLOUD_API_KEY || '269978581352322',
+  api_secret: process.env.CLOUD_API_SECRET || 'px1bgsJiGnCx0BUQ4-fPyeLczcI',
   secure: true,
 });
 
@@ -15,13 +15,11 @@ cloudinary.config({
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
-    folder: 'products', // folder in Cloudinary
+    folder: 'products',
     allowed_formats: ['jpg', 'png', 'jpeg', 'gif'],
   },
 });
 
-// ✅ This is the correct Multer instance
 const upload = multer({ storage: storage });
 
-module.exports = upload;  // export the multer instance
-
+module.exports = upload;

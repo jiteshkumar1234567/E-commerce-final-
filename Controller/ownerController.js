@@ -18,49 +18,81 @@ module.exports.ownerDashboard = async (req, res) => {
 }
 
 // This function will be used in your route
+
+// module.exports.addProduct = async (req, res) => {
+//   try {
+//     // 🔹 Correct way to get uploaded images URLs
+//     const images = req.files.map(f => f.path || f.url); 
+//     console.log("Images array:", images);
+
+//     const { name, price, discount, category, description } = req.body;
+
+//     // Validation
+//     if (!name || !price || !category || !description || images.length === 0) {
+//       return res.redirect("/owners/add-product?error=1");
+//     }
+
+//     const product = new Product({
+//       name,
+//       description,
+//       images, // array of strings now
+//       price,
+//       discount: discount || 0,
+//       category,
+//     });
+
+//     await product.save();
+//     res.redirect("/owners/add-product?success=1");
+
+//   } catch (err) {
+//     console.error("ADD PRODUCT ERROR:", err);
+//     res.redirect("/owners/add-product?error=1");
+//   }
+// };
+
 module.exports.addProduct = async (req, res) => {
   try {
-    // multiple images
-    const images = req.files ? req.files.map(file => file.path) : [];
+    const { name, description, price, discount, category } = req.body;
 
-    const {
-      name,
-      price,
-      discount,
-      category,
-      description,  
-      bgColor,
-      panelColor,
-      textColor
-    } = req.body;
-
-    // 🔒 Safety checks
-    if (!category || !description || !name || !price) {
-      return res.redirect("/owners/add-product?error=1");
+    if (!name || !description || !price || !category || !req.files || req.files.length === 0) {
+      return res.render("add-product", {
+        owner: req.owner,
+        error: "All fields are required",
+        success: null
+      });
     }
+
+    const images = req.files.map(file => file.path);
 
     const product = new Product({
       name,
-      description,        
-      images,
+      description,
       price,
       discount: discount || 0,
       category,
-      bgColor: bgColor || "#f5f7fb",
-      panelColor: panelColor || "#ffffff",
-      textColor: textColor || "#1f2937",
+      images
     });
 
     await product.save();
 
-    // ✅ SUCCESS
-    res.redirect("/owners/dashboard?success=1");
+    return res.render("add-product", {
+      owner: req.owner,
+      success: "✅ Product added successfully",
+      error: null
+    });
 
   } catch (err) {
-    console.error("Add product error:", err);
-    res.redirect("/owners/add-product?error=1");
+    console.error("Error adding product:", err);
+    return res.render("add-product", {
+      owner: req.owner,
+      error: "❌ Something went wrong",
+      success: null
+    });
   }
 };
+
+
+
 
 module.exports.updateOrder =  async (req, res) => {
   try {
