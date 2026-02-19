@@ -1,40 +1,7 @@
 <%- include('./partials/header') %>
 
 <style>
-  /* RESPONSIVE STYLING */
-  @media (max-width: 1024px) {
-    .grid-cols-1.md\:grid-cols-2 {
-      grid-template-columns: 1fr !important;
-    }
-    #mainImg {
-      height: 300px !important;
-    }
-    .flex.gap-4.mt-6.flex-wrap img {
-      width: 20% !important;
-      height: auto !important;
-    }
-  }
-
-  @media (max-width: 640px) {
-    section { padding: 4rem 1.5rem; }
-    h1 { font-size: 2rem !important; }
-    p { font-size: 0.9rem !important; }
-    #mainImg { height: 220px !important; }
-    .flex.gap-4.mt-6.flex-wrap img { width: 22% !important; }
-    .flex.gap-4.mt-4 button {
-      font-size: 0.9rem !important;
-      padding: 0.8rem !important;
-    }
-  }
-
-  /* SLIDE-IN ANIMATION FOR TOAST */
-  @keyframes slideIn {
-    0% { transform: translateX(100%); opacity: 0; }
-    100% { transform: translateX(0); opacity: 1; }
-  }
-  .animate-slideIn { animation: slideIn 0.3s ease forwards; }
-
-  /* PREMIUM LOOK */
+  /* PREMIUM GLASS CARD */
   .premium-card {
     background: rgba(255, 255, 255, 0.08);
     backdrop-filter: blur(25px);
@@ -77,43 +44,49 @@
     transition: transform 0.2s ease;
   }
   .trust-info span:hover { transform: scale(1.05); }
+
+  /* TOAST ANIMATION */
+  @keyframes slideIn {
+    0% { transform: translateX(100%); opacity: 0; }
+    100% { transform: translateX(0); opacity: 1; }
+  }
+  .animate-slideIn { animation: slideIn 0.3s ease forwards; }
 </style>
 
-<section class="pt-32 pb-24 px-6 min-h-screen bg-gradient-to-br from-indigo-800 via-purple-700 to-pink-700">
-  <div class="max-w-6xl mx-auto premium-card p-6 md:p-10 grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-12">
+<section class="pt-28 pb-16 px-4 sm:px-6 min-h-screen bg-gradient-to-br from-indigo-800 via-purple-700 to-pink-700">
 
-    <!-- ================= IMAGES ================= -->
+  <div class="max-w-6xl mx-auto premium-card p-6 md:p-10 grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-12">
+
+    <!-- ========== IMAGES ========== -->
     <div>
       <img id="mainImg"
            src="<%= product.images[0] %>"
-           class="w-full h-[420px] md:h-[420px] object-cover shadow-2xl">
+           class="w-full h-[280px] sm:h-[340px] md:h-[420px] object-cover shadow-2xl">
 
-      <div class="flex gap-4 mt-6 flex-wrap justify-start">
+      <div class="flex gap-4 mt-6 flex-wrap">
         <% product.images.forEach(img => { %>
           <img src="<%= img %>"
                onclick="changeImg(this.src)"
-               class="w-24 h-24 object-cover cursor-pointer border-2 border-white/30 thumbnail transition">
+               class="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 object-cover cursor-pointer border-2 border-white/30 thumbnail transition">
         <% }) %>
       </div>
     </div>
 
-    <!-- ================= DETAILS ================= -->
+    <!-- ========== DETAILS ========== -->
     <div class="text-white flex flex-col gap-6">
 
-      <!-- PRODUCT NAME -->
-      <h1 class="text-4xl md:text-5xl font-extrabold leading-tight">
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold leading-tight">
         <%= product.name %>
       </h1>
 
-      <!-- DESCRIPTION -->
-      <p class="opacity-90 leading-relaxed text-lg md:text-xl">
+      <p class="opacity-90 leading-relaxed text-base sm:text-lg md:text-xl">
         <%= product.description %>
       </p>
 
       <!-- PRICE CARD -->
       <div class="premium-card p-6 md:p-8 flex flex-col gap-3">
 
-        <div class="flex items-end gap-4">
+        <div class="flex items-end gap-4 flex-wrap">
           <span class="text-4xl md:text-5xl font-extrabold text-yellow-400">
             ₹<%= product.finalPrice %>
           </span>
@@ -133,16 +106,16 @@
         </p>
       </div>
 
-      <!-- ADD TO CART BUTTON -->
-      <div class="flex flex-col sm:flex-row gap-4 mt-4">
+      <!-- BUTTON -->
+      <div class="flex flex-col gap-4 mt-4 sm:flex-row">
         <button onclick="addToCart('<%= product._id %>')"
           class="flex-1 py-4 rounded-2xl font-bold text-lg md:text-xl add-cart-btn shadow-xl">
           🛒 Add to Cart
         </button>
       </div>
 
-      <!-- TRUST INFO -->
-      <div class="flex flex-wrap gap-6 mt-4 text-sm md:text-base opacity-90 trust-info">
+      <!-- TRUST BADGES -->
+      <div class="flex flex-wrap gap-4 sm:gap-6 mt-4 text-sm md:text-base opacity-90 trust-info">
         <span>✅ 100% Original</span>
         <span>🚚 Fast Delivery</span>
         <span>🔁 Easy Returns</span>
@@ -160,7 +133,7 @@ function changeImg(src){
   document.getElementById("mainImg").src = src;
 }
 
-// ================= ADD TO CART =================
+// ADD TO CART
 async function addToCart(id){
   try{
     const res = await fetch(`/cart/add/${id}`, { method: "POST" });
@@ -172,12 +145,11 @@ async function addToCart(id){
       showToast(data.message || "Cannot add to cart", "error");
     }
   } catch(err){
-    console.error(err);
     showToast("Please login first", "error");
   }
 }
 
-// ================= TOAST FUNCTION =================
+// TOAST FUNCTION
 function showToast(msg, type="success"){
   const t = document.createElement("div");
 
@@ -193,7 +165,7 @@ function showToast(msg, type="success"){
   document.getElementById("toast-container").appendChild(t);
 
   setTimeout(() => {
-    t.classList.add("opacity-0", "transition-opacity", "duration-500");
+    t.classList.add("opacity-0","transition-opacity","duration-500");
     setTimeout(() => t.remove(), 500);
   }, 2500);
 }
